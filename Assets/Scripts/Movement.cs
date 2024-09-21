@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -10,13 +11,25 @@ public class Movement : MonoBehaviour
     [SerializeField] public float moveSpeed;
     [SerializeField] public float jumpHeight;
     [SerializeField] public float slamSpeed;
-    
 
+
+
+   
+[SerializeField] public float dashTime;
+[SerializeField] public float dashSpeed;
+public float time;
+
+
+
+public float isDashing;
+    
     [SerializeField] public GameObject boundaries;
     private bool isGrounded;
     private void Awake(){
 
         body = GetComponent<Rigidbody2D>();
+        time = 0;
+        
     }
 
 
@@ -33,9 +46,16 @@ public class Movement : MonoBehaviour
         //stores player facing direction for ez access
         float horizontalInput = Input.GetAxis("Horizontal"); 
 
-
+        if (Input.GetKey(KeyCode.LeftShift)){
+            
+        }
         //left and right movement multiplied by movement speed
-        body.velocity = new Vector2(horizontalInput*moveSpeed, body.velocity.y);
+        body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
+        
+        
+        
+        
+        
         //press spacebar to jump
         if (Input.GetKey(KeyCode.Space) && isGrounded){
             Jump();
@@ -45,6 +65,14 @@ public class Movement : MonoBehaviour
             GroundSlam();
         }
         
+        
+        if (Input.GetKey(KeyCode.LeftShift)){
+           Dash(horizontalInput);
+        }
+        else if(!Input.GetKey(KeyCode.LeftShift)){
+            body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
+        }
+
     
     }
 
@@ -65,5 +93,12 @@ public class Movement : MonoBehaviour
         body.velocity = new Vector2(0, slamSpeed);
         
     }
+    
+    private void Dash(float horizontalInput){
+         body.velocity = new Vector2(horizontalInput * dashSpeed,body.velocity.y);
+    } 
+        
+    
+    
 
 }
