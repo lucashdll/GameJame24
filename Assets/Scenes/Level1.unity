@@ -259,6 +259,8 @@ GameObject:
   m_Layer: 0
   m_Name: Ceiling
   m_TagString: Untagged
+  m_Name: Ground
+  m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1240,7 +1242,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 757133d3804e39c428dbbe12ef1e5ff2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
+  moveSpeed: 5
+  jumpHeight: 5
   boundaries: {fileID: 0}
 --- !u!1001 &1141570409
 PrefabInstance:
