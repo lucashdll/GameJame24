@@ -9,6 +9,7 @@ public class Movement : MonoBehaviour
 
     [SerializeField] public float moveSpeed;
     [SerializeField] public float jumpHeight;
+    [SerializeField] public float slamSpeed;
     
 
     [SerializeField] public GameObject boundaries;
@@ -39,7 +40,10 @@ public class Movement : MonoBehaviour
         if (Input.GetKey(KeyCode.Space) && isGrounded){
             Jump();
         }
-
+        //trigger groundslam
+        if (Input.GetKey(KeyCode.S) && (isGrounded == false)){
+            GroundSlam();
+        }
         
     
     }
@@ -56,4 +60,10 @@ public class Movement : MonoBehaviour
             isGrounded = true;
         }
     }
+
+    private void GroundSlam(){
+        body.velocity = new Vector2(0, slamSpeed);
+        
+    }
+
 }
