@@ -76,7 +76,7 @@ private bool isGroundSlamming = false;
         if(!isWallJumping){
         Flip();
         }
-
+        
        
 
 
@@ -85,6 +85,11 @@ private bool isGroundSlamming = false;
     private void FixedUpdate(){//from copied code, not sure why this is here
         if(!isWallJumping){
             body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+            
+        
+        }
+        else{
+           
         }
         if (!Input.GetKeyDown(KeyCode.S)){
             isGroundSlamming = false;
