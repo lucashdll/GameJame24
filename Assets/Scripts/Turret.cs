@@ -21,25 +21,17 @@ public class Turret : MonoBehaviour
     [SerializeField]
     private float speed = 100.0f;
 
-    void Start()
-    { 
-    
-    }
 
     void Update()
     {
         if (GameManager.instance.player != null)
         {
             transform.LookAt(GameManager.instance.player.transform);
-        }
-    }
-
-    void OnTriggerEnter(Collider other) 
-    {
-        Debug.Log("test");
-        if (other.transform.tag == "Player")
-        {
-            Shoot();
+            // shoot at player if they're within range
+            if (Vector2.Distance(this.transform.position, GameManager.instance.player.transform.position) <= 12)
+            {
+                Shoot();
+            }
         }
     }
 

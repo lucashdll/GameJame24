@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Projectile : MonoBehaviour
 {
-    [SerializeField] private float lifeTime = 5.0f;
+    [SerializeField] private float lifeTime = 2.0f;
     [SerializeField] private float speed = 10.0f;
     [SerializeField] private float speedReduction = 1.0f;
 
@@ -30,12 +30,17 @@ public class Projectile : MonoBehaviour
         transform.position += transform.forward * speed * Time.deltaTime;
     }
 
-    void OnTriggerEnter(Collider other)
+    void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.transform.tag == "Player")
+        if (other.transform.tag != "Turret")
         {
-            other.transform.GetComponent<Movement>().moveSpeed -= speedReduction;
+            if (other.transform.tag == "Player" && other.transform.GetComponent<Movement>().moveSpeed > 1)
+            {
+                // reduce player speed upon projectile hit
+                other.transform.GetComponent<Movement>().moveSpeed -= speedReduction;
+                //Debug.Log(other.transform.GetComponent<Movement>().moveSpeed);
+            }
+            Destroy(this.gameObject);
         }
-        Destroy(this.gameObject);
     }
 }
