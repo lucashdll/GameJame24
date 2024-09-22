@@ -24,13 +24,14 @@ private bool isWallJumping;
 private float wallJumpingDirection;
 [SerializeField]private float wallJumpingTime = 2f;
 private float wallJumpingCounter;
+[SerializeField] private float wallJumpSpeedMultiplier = 0.3f;
 [SerializeField]private float wallJumpingDuration = 0.4f;
-[SerializeField]private Vector2 wallJumpingPower = new Vector2(8f, 16f);
+[SerializeField]private Vector2 wallJumpingPower = new Vector2(8f, 30f);
 // groundSlam
 [SerializeField]private float groundSlamSpeed = -15f;
 private bool isGroundSlamming = false;
 //jumpPad
-private Vector2 jumpPadVector= new Vector2(8f, 18f);
+[SerializeField]private Vector2 jumpPadVector= new Vector2(8f, 18f);
 
 
 
@@ -59,6 +60,7 @@ private Vector2 jumpPadVector= new Vector2(8f, 18f);
 
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded){
             body.velocity = new Vector2(body.velocity.x, jumpHeight);
+            isGrounded = false;
         }
         if (Input.GetKeyDown(KeyCode.Space) && (body.velocity.y > 0f)){
             body.velocity = new Vector2(body.velocity.x, body.velocity.y * 0.5f);
@@ -89,14 +91,12 @@ private Vector2 jumpPadVector= new Vector2(8f, 18f);
         }
     }
 
-    private bool IsGrounded(){
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
-    }
+    
     private bool IsWalled(){
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
     }
     private void WallSlide(){
-        if (IsWalled() && !IsGrounded() && horizontalInput != 0f){
+        if (IsWalled() && !isGrounded && horizontalInput != 0f){
             isWallsliding = true;
             body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlidingSpeed, float.MaxValue));
         }
@@ -117,7 +117,7 @@ private Vector2 jumpPadVector= new Vector2(8f, 18f);
             }
             if (Input.GetKeyDown(KeyCode.Space) && wallJumpingCounter > 0f){
                 isWallJumping = true;
-                body.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x, wallJumpingPower.y);
+                body.velocity = new Vector2(wallJumpingDirection * wallJumpingPower.x + speed * Mathf.Sign(horizontalInput), wallJumpingPower.y);
                 wallJumpingCounter = 0f;
 
                 if (transform.localScale.x != wallJumpingDirection){
