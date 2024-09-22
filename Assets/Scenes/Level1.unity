@@ -1793,8 +1793,8 @@ GameObject:
   - component: {fileID: 1100518134}
   - component: {fileID: 1100518133}
   - component: {fileID: 1100518136}
-  - component: {fileID: 1100518135}
   - component: {fileID: 1100518137}
+  - component: {fileID: 1100518135}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1954,7 +1954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 8
-  jumpHeight: 12
+  jumpHeight: 16
   wallSlidingSpeed: 2
   wallCheck: {fileID: 2131307221}
   wallLayer:
