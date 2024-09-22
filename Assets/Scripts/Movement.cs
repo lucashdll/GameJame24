@@ -26,7 +26,10 @@ public class Movement : MonoBehaviour
     private float wallDirection;
     private bool onWall;
     private float walljumpTimer = 200000;
-// groundslam stuf
+// wallslide stuff
+private bool isWallsliding;
+private float wallSlidingSpeed = 2f;
+[SerializeField] private Transform wallCheck;
 
 // removed dash stuff
    
@@ -62,25 +65,22 @@ public class Movement : MonoBehaviour
         horizontalInput = Input.GetAxis("Horizontal"); //values -1, 0, 1 for determining direction player is facing
 
         //checks if player walljumped, sets velocity back to normal after
-        walljumpTimer -= Time.deltaTime;
-        if (walljumpTimer < 0){
+        //walljumpTimer -= Time.deltaTime;
+        
         //left and right movement multiplied by movement speed
-        body.AddForce(new Vector2(horizontalInput * moveSpeed, body.velocity.y));
-        wallDirection = -horizontalInput;
-        }
+        body.velocity = new Vector2(horizontalInput * moveSpeed, body.velocity.y);
+        
+        
         
         
         
         
         //press spacebar to jump
-        if (Input.GetKey(KeyCode.Space)){
+        if (Input.GetKey(KeyCode.Space) && isGrounded){
             Jump();
         }
         
-        //trigger groundslam
-        // if (Input.GetKey(KeyCode.S) && (isGrounded == false)){
-            // GroundSlam();
-        // }
+        wallSlide();
         
         
         
@@ -89,32 +89,32 @@ public class Movement : MonoBehaviour
     }
 
     private bool IsGrounded(){//raycast check to see if on ground returns T/F
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, Vector2.down, 0.1f, groundLayer);
+        
+        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 0.2f, groundLayer);
         return raycastHit.collider != null;
         
     }
     private bool OnWall(){//raycast check to see if close to wall
-        RaycastHit2D raycastHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, new Vector2(transform.localScale.x, 0), 420f, wallLayer);
-        return raycastHit.collider != null;
+        return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
+    }
+    private void wallSlide(){
+        if (OnWall() && !IsGrounded() && horizontalInput != 0f){
+            isWallsliding = true;
+            body.velocity = new Vector2(body.velocity.x, Mathf.Clamp(body.velocity.y, -wallSlidingSpeed, float.MaxValue));
+        }
+        else{
+            isWallsliding = false;
+        }
     }
 
 
     private void Jump(){//called when space is pressed, checks if player close to ground or wall
 
-        if (IsGrounded()){//regular jump
+        
         body.velocity = new Vector2(body.velocity.x, jumpHeight);
         isGrounded = false;
-        }
-        else if (OnWall() && !IsGrounded()){//walljump
-            // if(horizontalInput != 0){
-            
-            body.AddForce(new Vector2(Mathf.Sign(wallDirection * wallJumpSpeed) * 2000, 1000));
-            transform.localScale = new Vector2(-Mathf.Sign(transform.localScale.x), transform.localScale.y);
-            body.velocity = new Vector2(wallJumpSpeed * 2, wallJumpHeight*2);
-            walljumpTimer = 2000000;
-            // }
-            
-        }
+        
+        
     }
     
 
