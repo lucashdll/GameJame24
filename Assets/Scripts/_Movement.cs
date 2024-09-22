@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEditor.Tilemaps;
@@ -31,7 +32,7 @@ private float wallJumpingCounter;
 [SerializeField]private float groundSlamSpeed = -15f;
 private bool isGroundSlamming = false;
 //jumpPad
-[SerializeField]private Vector2 jumpPadVector= new Vector2(8f, 18f);
+[SerializeField]private Vector2 jumpPadVector= new Vector2(18f, 90f);
 
 
 
@@ -40,6 +41,7 @@ private bool isGroundSlamming = false;
 [SerializeField] private Transform groundCheck;
 
 [SerializeField] private LayerMask groundLayer;
+public Animator anime;
 
 
 
@@ -87,19 +89,35 @@ private bool isGroundSlamming = false;
             body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
             
         
+        if (horizontalInput != 0f){
+            anime.SetBool("idle",false);
+            anime.SetBool("moving",true);
         }
         else{
-           
+            anime.SetBool("idle",true);
+            anime.SetBool("moving",false);
         }
         if (!Input.GetKeyDown(KeyCode.S)){
             isGroundSlamming = false;
         }
+        if (body.velocity.y > 0f && !isGrounded){
+            anime.SetBool("isJumping",true);
+            anime.SetBool("isFalling",false);
+        }
+        else if (body.velocity.y < 0f && !isGrounded){
+            anime.SetBool("isFalling",true);
+            anime.SetBool("isJumping",false);
+        }
     }
-
+    }
     
     private bool IsWalled(){
+        // anime.SetBool("onWall",true);
         return Physics2D.OverlapCircle(wallCheck.position, 0.2f, wallLayer);
     }
+    
+
+
     private void WallSlide(){
         if (IsWalled() && !isGrounded && horizontalInput != 0f){
             isWallsliding = true;
@@ -107,7 +125,9 @@ private bool isGroundSlamming = false;
         }
         else{
             isWallsliding = false;
+            
         }
+        
     }
         private void WallJump(){
             if (isWallsliding){
