@@ -13,17 +13,22 @@ private float horizontalInput;
 [SerializeField]private float jumpHeight = 16f;
 private bool isFacingRight = true;
 // wallsliding 
+[SerializeField]private float wallSlidingSpeed = 2f;
+[SerializeField] private Transform wallCheck;
+[SerializeField] private LayerMask wallLayer;
 private bool isWallsliding;
+// wall Jumping
 private bool isWallJumping;
 private float wallJumpingDirection;
-private float wallJumpingTime = 2f;
+[SerializeField]private float wallJumpingTime = 2f;
 private float wallJumpingCounter;
-private float wallJumpingDuration = 0.4f;
-private Vector2 wallJumpingPower = new Vector2(8f, 16f);
+[SerializeField]private float wallJumpingDuration = 0.4f;
+[SerializeField]private Vector2 wallJumpingPower = new Vector2(8f, 16f);
+// groundSlam
 
 
 
-[SerializeField]private float wallSlidingSpeed = 2f;
+
 
 [SerializeField] private Rigidbody2D body;
 
@@ -31,9 +36,9 @@ private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 
 [SerializeField] private LayerMask groundLayer;
 
-[SerializeField] private Transform wallCheck;
 
-[SerializeField] private LayerMask wallLayer;
+
+
 
 
 
