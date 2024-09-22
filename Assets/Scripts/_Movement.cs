@@ -9,7 +9,7 @@ public class _Movement : MonoBehaviour
 {
     // basic movement
 private float horizontalInput;
-[SerializeField]private float speed = 8f;
+[SerializeField]public float speed = 8f;
 [SerializeField]private float jumpHeight = 16f;
 private bool isFacingRight = true;
 private bool isGrounded;
