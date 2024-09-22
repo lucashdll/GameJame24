@@ -5,8 +5,8 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float lifeTime = 5.0f;
-    [SerializeField] private float moveSpeed = 10.0f;
-    [SerializeField] private float speedReduction = 10.0f;
+    [SerializeField] private float speed = 10.0f;
+    [SerializeField] private float speedReduction = 1.0f;
 
     void Start()
     {
@@ -23,7 +23,6 @@ public class Projectile : MonoBehaviour
         this.speed = speed;
         this.speedReduction = speedReduction;
   
-        this.targetTag = targetTag;
     }
 
     private void MoveProjectile()
@@ -33,13 +32,10 @@ public class Projectile : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-
-        if (targetTag != null && targetTag.Contains(other.transform.tag))
+        if (other.transform.tag == "Player")
         {
-            if (targetTag.Contains("Player"))
-            {
-                other.GetComponent<Player>();
-            }
+            other.transform.GetComponent<Movement>().moveSpeed -= speedReduction;
         }
+        Destroy(this.gameObject);
     }
 }

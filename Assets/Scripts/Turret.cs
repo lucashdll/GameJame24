@@ -7,9 +7,6 @@ using UnityEngine.UI;
 public class Turret : MonoBehaviour
 {
     [SerializeField]
-    private Turret turret;
-
-    [SerializeField]
     private GameObject projectile;
 
     [SerializeField]
@@ -24,11 +21,24 @@ public class Turret : MonoBehaviour
     [SerializeField]
     private float speed = 100.0f;
 
+    void Start()
+    { 
+    
+    }
+
     void Update()
     {
         if (GameManager.instance.player != null)
         {
             transform.LookAt(GameManager.instance.player.transform);
+        }
+    }
+
+    void OnTriggerEnter(Collider other) 
+    {
+        Debug.Log("test");
+        if (other.transform.tag == "Player")
+        {
             Shoot();
         }
     }
@@ -38,7 +48,7 @@ public class Turret : MonoBehaviour
         if (Time.time > fireTime)
         {
             var bullet = Instantiate(projectile, transform.position, transform.rotation);
-            bullet.GetComponent<Projectile>().Init(speed, speed);
+            bullet.GetComponent<Projectile>().Init(speed, speedReduction);
             fireTime = Time.time + fireRate;
         }
     }
