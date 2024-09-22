@@ -34,10 +34,10 @@ public class Projectile : MonoBehaviour
     {
         if (other.transform.tag != "Turret")
         {
-            if (other.transform.tag == "Player" && other.transform.GetComponent<Movement>().moveSpeed > 1)
+            if (other.transform.tag == "Player" && other.transform.GetComponent<_Movement>().moveSpeed > 1)
             {
                 // reduce player speed upon projectile hit
-                other.transform.GetComponent<Movement>().moveSpeed -= speedReduction;
+                other.transform.GetComponent<_Movement>().moveSpeed -= speedReduction;
                 //Debug.Log(other.transform.GetComponent<Movement>().moveSpeed);
             }
             Destroy(this.gameObject);
