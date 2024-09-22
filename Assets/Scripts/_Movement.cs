@@ -12,6 +12,8 @@ private float horizontalInput;
 [SerializeField]private float speed = 8f;
 [SerializeField]private float jumpHeight = 16f;
 private bool isFacingRight = true;
+private bool isGrounded;
+
 // wallsliding 
 [SerializeField]private float wallSlidingSpeed = 2f;
 [SerializeField] private Transform wallCheck;
@@ -26,7 +28,9 @@ private float wallJumpingCounter;
 [SerializeField]private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 // groundSlam
 [SerializeField]private float groundSlamSpeed = -15f;
-private bool isGroundSlamming;
+private bool isGroundSlamming = false;
+//jumpPad
+private Vector2 jumpPadVector= new Vector2(8f, 18f);
 
 
 
@@ -53,13 +57,13 @@ private bool isGroundSlamming;
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
 
-        if (Input.GetKeyDown(KeyCode.Space) && IsGrounded()){
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded){
             body.velocity = new Vector2(body.velocity.x, jumpHeight);
         }
         if (Input.GetKeyDown(KeyCode.Space) && (body.velocity.y > 0f)){
             body.velocity = new Vector2(body.velocity.x, body.velocity.y * 0.5f);
         }
-        if(Input.GetKeyDown(KeyCode.S) && !IsGrounded()){
+        if(Input.GetKeyDown(KeyCode.S)){
             isGroundSlamming= true;
         }
         
@@ -150,8 +154,15 @@ private bool isGroundSlamming;
 
     }
 
+private void OnCollisionEnter2D(Collision2D collision){
+
+        if (collision.gameObject.tag == "JumpPad"){
+            body.velocity = jumpPadVector;
+        }
+        if (collision.gameObject.tag == "Ground"){
+            isGrounded = true;
+        }
 
 
-
-
+}
 }
