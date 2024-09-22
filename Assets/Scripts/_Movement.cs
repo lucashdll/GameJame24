@@ -25,8 +25,8 @@ private float wallJumpingCounter;
 [SerializeField]private float wallJumpingDuration = 0.4f;
 [SerializeField]private Vector2 wallJumpingPower = new Vector2(8f, 16f);
 // groundSlam
-
-
+[SerializeField]private float groundSlamSpeed = -15f;
+private bool isGroundSlamming;
 
 
 
@@ -59,6 +59,12 @@ private float wallJumpingCounter;
         if (Input.GetKeyDown(KeyCode.Space) && (body.velocity.y > 0f)){
             body.velocity = new Vector2(body.velocity.x, body.velocity.y * 0.5f);
         }
+        if(Input.GetKeyDown(KeyCode.S) && !IsGrounded()){
+            isGroundSlamming= true;
+        }
+        
+        
+        GroundSlam();
         WallJump();
         WallSlide();
         if(!isWallJumping){
@@ -73,6 +79,9 @@ private float wallJumpingCounter;
     private void FixedUpdate(){//from copied code, not sure why this is here
         if(!isWallJumping){
             body.velocity = new Vector2(horizontalInput * speed, body.velocity.y);
+        }
+        if (!Input.GetKeyDown(KeyCode.S)){
+            isGroundSlamming = false;
         }
     }
 
@@ -120,7 +129,15 @@ private float wallJumpingCounter;
     private void StopWallJumping(){
         isWallJumping = false;
     }
+    
 
+    
+
+    private void GroundSlam(){
+        if(isGroundSlamming){
+        body.velocity = new Vector2(body.position.x, groundSlamSpeed);
+        }
+    }
 
     private void Flip(){
         if (isFacingRight && horizontalInput <0f || !isFacingRight && horizontalInput>0f){
