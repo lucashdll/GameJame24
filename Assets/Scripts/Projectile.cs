@@ -5,31 +5,41 @@ using UnityEngine;
 public class Projectile : MonoBehaviour
 {
     [SerializeField] private float lifeTime = 5.0f;
-    [SerializeField] private float moveSpeed = 300.0f;
-    [SerializeField] private float damage = 10.0f;
+    [SerializeField] private float moveSpeed = 10.0f;
+    [SerializeField] private float speedReduction = 10.0f;
 
-    // Start is called before the first frame update
     void Start()
     {
         Destroy(this.gameObject, lifeTime);
     }
 
-    // Update is called once per frame
     void Update()
     {
         MoveProjectile();
     }
 
+    public void Init(float speed, float speedReduction)
+    {
+        this.speed = speed;
+        this.speedReduction = speedReduction;
+  
+        this.targetTag = targetTag;
+    }
+
     private void MoveProjectile()
     {
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        transform.position += transform.forward * speed * Time.deltaTime;
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.transform.tag == "Player")
+
+        if (targetTag != null && targetTag.Contains(other.transform.tag))
         {
-            //other.GetComponent<Player>().Slow(damage);
+            if (targetTag.Contains("Player"))
+            {
+                other.GetComponent<Player>();
+            }
         }
     }
 }

@@ -6,20 +6,40 @@ using UnityEngine.UI;
 
 public class Turret : MonoBehaviour
 {
-    [SerializeField] private float speedReduction = 1.0f;
-    [SerializeField] private float slowRate = 0.2f;
+    [SerializeField]
+    private Turret turret;
 
-    // Update is called once per frame
+    [SerializeField]
+    private GameObject projectile;
+
+    [SerializeField]
+    private float fireRate = 3.0f;
+
+    [SerializeField]
+    private float fireTime = 3f;
+
+    [SerializeField]
+    public float speedReduction = 1.0f;
+
+    [SerializeField]
+    private float speed = 100.0f;
+
     void Update()
     {
-        Movement();
+        if (GameManager.instance.player != null)
+        {
+            transform.LookAt(GameManager.instance.player.transform);
+            Shoot();
+        }
     }
 
-    private void Movement()
+    public void Shoot()
     {
-        if (GameManager.instance.player)
-        { // aim at player
-            transform.LookAt(GameManager.instance.player.transform.position); // look at the player
+        if (Time.time > fireTime)
+        {
+            var bullet = Instantiate(projectile, transform.position, transform.rotation);
+            bullet.GetComponent<Projectile>().Init(speed, speed);
+            fireTime = Time.time + fireRate;
         }
     }
 }
